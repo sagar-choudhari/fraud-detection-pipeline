@@ -15,14 +15,34 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <kafka.version>4.2.0</kafka.version>
     <jackson.version>2.22.0</jackson.version>
+    <spark.version>3.5.1</spark.version>       <!-- Spark 3.5.x = latest stable -->
+    <scala.compat.version>2.12</scala.compat.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_${scala.compat.version}</artifactId>
+      <version>${spark.version}</version>
+    </dependency>
+
+    <!-- Spark SQL: DataFrame, SparkSession, SQL queries -->
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_${scala.compat.version}</artifactId>
+      <version>${spark.version}</version>
+    </dependency>
     <!-- Kafka Client — for producer and consumer -->
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
       <version>${kafka.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql-kafka-0-10_2.12</artifactId>
+      <version>${spark.version}</version>
     </dependency>
 
     <!-- Jackson — for serializing Transaction POJO to JSON -->
@@ -45,4 +65,26 @@
       <version>${jackson.version}</version>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <source>17</source>
+          <target>17</target>
+          <compilerArgs>
+            <arg>--add-opens=java.base/sun.nio.ch=ALL-UNNAMED</arg>
+            <arg>--add-opens=java.base/java.nio=ALL-UNNAMED</arg>
+            <arg>--add-opens=java.base/java.lang=ALL-UNNAMED</arg>
+            <arg>--add-opens=java.base/java.util=ALL-UNNAMED</arg>
+            <arg>--add-opens=java.base/java.lang.invoke=ALL-UNNAMED</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
