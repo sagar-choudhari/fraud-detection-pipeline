@@ -3,6 +3,12 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Spark checkpoints
+checkpoint/
+
+# Spark warehouse
+spark-warehouse/
+
 ### IntelliJ IDEA ###
 .idea/
 .idea/modules.xml
