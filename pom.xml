@@ -17,6 +17,7 @@
     <spark.version>3.5.1</spark.version>       <!-- Spark 3.5.x = latest stable -->
     <jackson.version>2.15.2</jackson.version>
     <scala.compat.version>2.12</scala.compat.version>
+    <delta.spark.version>3.2.0</delta.spark.version>
   </properties>
 
   <dependencies>
@@ -55,6 +56,12 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
       <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.delta</groupId>
+      <artifactId>delta-spark_${scala.compat.version}</artifactId>
+      <version>${delta.spark.version}</version>
     </dependency>
 
   </dependencies>
