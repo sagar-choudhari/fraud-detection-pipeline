@@ -1,5 +1,7 @@
 package com.frauddetection.streaming;
 
+import com.frauddetection.spark.SparkSessionFactory;
+import com.frauddetection.utils.ConfigLoader;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -8,15 +10,15 @@ import org.apache.spark.sql.streaming.StreamingQueryException;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 
-import java.util.concurrent.TimeoutException;
 import static org.apache.spark.sql.functions.*;
+
 public class TransactionStreamReader {
 
-    public static void main(String[] args) throws TimeoutException, StreamingQueryException {
-        SparkSession spark = SparkSession.builder()
-                .appName("Transaction Stream Reader")
-                .master("local[*]")
-                .getOrCreate();
+    private static final String DELTA_PATH = ConfigLoader.get("delta.transactions.path");
+    private static final String CHECKPOINT_PATH = ConfigLoader.get("checkpoint.path");
+
+    public static void main(String[] args) throws StreamingQueryException {
+        SparkSession spark = SparkSessionFactory.create("Transaction Stream Reader");
 
         spark.sparkContext().setLogLevel("ERROR");
 
@@ -39,16 +41,16 @@ public class TransactionStreamReader {
                 .select(
                         from_json(col("jsonStr"), transactionSchema).alias("data")
                 )
-                .select("data.*");
+                .select("data.*")
+                .withColumn("timestamp", to_timestamp(col("timestamp"), "yyyy-MM-dd'T'HH:mm:ss"));
 
         transactions.printSchema();
 
         StreamingQuery query = transactions.writeStream()
-                .format("console")
+                .format("delta")
                 .outputMode("append")
-                .option("checkpointLocation", "checkpoint/transactions")
-                .option("truncate", false)
-                .start();
+                .option("checkpointLocation", CHECKPOINT_PATH)
+                .start(DELTA_PATH);
 
         query.awaitTermination();
 

@@ -9,6 +9,9 @@ checkpoint/
 # Spark warehouse
 spark-warehouse/
 
+# spark delta
+delta/
+
 ### IntelliJ IDEA ###
 .idea/
 .idea/modules.xml
