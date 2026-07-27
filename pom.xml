@@ -64,6 +64,27 @@
       <version>${delta.spark.version}</version>
     </dependency>
 
+    <!-- Already have this -->
+    <dependency>
+      <groupId>io.delta</groupId>
+      <artifactId>delta-spark_2.12</artifactId>
+      <version>3.2.0</version>
+    </dependency>
+
+    <!-- Need to add — Hadoop S3 connector -->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-aws</artifactId>
+      <version>3.3.4</version>
+    </dependency>
+
+    <!-- Need to add — AWS SDK -->
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-bundle</artifactId>
+      <version>1.12.262</version>
+    </dependency>
+
   </dependencies>
 
   <build>
