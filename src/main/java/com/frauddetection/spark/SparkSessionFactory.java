@@ -1,5 +1,6 @@
 package com.frauddetection.spark;
 
+import com.frauddetection.utils.ConfigLoader;
 import org.apache.spark.sql.SparkSession;
 
 public class SparkSessionFactory {
@@ -10,12 +11,15 @@ public class SparkSessionFactory {
         if (instance == null){
             instance = SparkSession.builder()
                     .appName(appName)
-                    .master("local[*]")
-                    .config("spark.sql.shuffle.partitions", "4")
+                    .master(ConfigLoader.get("spark.master"))
                     .config("spark.sql.extensions",
                             "io.delta.sql.DeltaSparkSessionExtension")
                     .config("spark.sql.catalog.spark_catalog",
                             "org.apache.spark.sql.delta.catalog.DeltaCatalog")
+                    .config("spark.hadoop.fs.s3a.impl",
+                            "org.apache.hadoop.fs.s3a.S3AFileSystem")
+                    .config("spark.hadoop.fs.s3a.aws.credentials.provider",
+                            "com.amazonaws.auth.DefaultAWSCredentialsProviderChain")
                     .getOrCreate();
         }
         return instance;
