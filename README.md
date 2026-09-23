@@ -296,10 +296,6 @@ s3://your-bucket/
 
 ---
 
-## Target Role
-
-Built as a portfolio project targeting **Data Engineer** roles at BFSI and GCC companies (Barclays, Deutsche Bank).
-
 Demonstrates: Kafka producer/consumer, Spark Structured Streaming internals, Delta Lake ACID operations, AWS S3 integration, medallion lakehouse architecture, and fraud detection SQL logic.
 
 ---
